@@ -1,3 +1,4 @@
+const assert = require("assert");
 const fs = require("fs");
 
 const SUFFIX_TO_CONTENT_TYPE = {
@@ -12,6 +13,7 @@ const staticHanlder = (req, res) => {
   const filename = __dirname + "/../.." + req.url.split("?")[0];
   const ext = filename.split(".").pop();
   const contentType = SUFFIX_TO_CONTENT_TYPE[ext];
+  assert(contentType);
   if (contentType) {
     res.setHeader("Content-Type", contentType);
   }

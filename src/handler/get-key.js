@@ -1,3 +1,5 @@
+const assert = require("assert");
+
 const _keyToData = {};
 
 const getKeyHandler = (req, res) => {
@@ -10,6 +12,7 @@ const getKeyHandler = (req, res) => {
       args[parts[0]] = parts[1];
     });
   const key = args.key;
+  assert(key);
   console.log(`getKeyHandler: key="${key}"`);
 
   const data = _keyToData[key];

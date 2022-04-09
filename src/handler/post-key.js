@@ -12,6 +12,7 @@ const postKeyHandler = (req, res) => {
       args[parts[0]] = parts[1];
     });
   const key = args.key;
+  assert(key);
   console.log(`postKeyHandler: key="${key}"`);
 
   // Handler is called early, POST body might still be arriving.
