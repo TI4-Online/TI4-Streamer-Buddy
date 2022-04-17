@@ -19,5 +19,9 @@
     "build": "electron-builder --mac --windows --linux",
     "release": "electron-builder --mac --windows --linux --publish always"
   },
-  "config": {}
+  "build": {
+    "appId": "com.example.ti4-streamer-buddy",
+    "files": [],
+    "extraResources": []
+  }
 }
