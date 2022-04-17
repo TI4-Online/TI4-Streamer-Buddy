@@ -32,6 +32,10 @@ const requestListener = function (req, res) {
 };
 
 // Open a window on start.
+// (https://dev.twitch.tv/docs/extensions/designing):
+// Panel Extensions are limited to 318px wide x 496px high, to avoid iframe
+// scrolling. Within these limits, try to allow 10px of inner padding for any
+// text within your extension, for maximum readability.
 app.whenReady().then(() => {
   const win = new BrowserWindow({
     width: 320,
