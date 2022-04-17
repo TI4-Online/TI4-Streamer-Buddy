@@ -1,5 +1,5 @@
 {
-  "name": "TI4-Streamer-Buddy",
+  "name": "ti4-streamer-buddy",
   "version": "0.0.1",
   "description": "Localhost service for Twitch overlays",
   "main": "src/main.js",
@@ -15,9 +15,9 @@
   },
   "scripts": {
     "buddy": "electron .",
-		"postinstall": "electron-builder install-app-deps",
-		"build": "electron-builder --mac --windows --linux",
-		"release": "electron-builder --mac --windows --linux --publish always"
+    "postinstall": "electron-builder install-app-deps",
+    "build": "electron-builder --mac --windows --linux",
+    "release": "electron-builder --mac --windows --linux --publish always"
   },
   "config": {}
 }
