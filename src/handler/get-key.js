@@ -15,13 +15,13 @@ const getKeyHandler = (req, res) => {
   assert(key);
   console.log(`getKeyHandler: key="${key}"`);
 
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const data = _keyToData[key];
   if (!data) {
     res.writeHead(404);
     res.end();
     return;
   }
-  res.setHeader("Access-Control-Allow-Origin", "*");
   res.writeHead(200);
   res.end(data);
 };
