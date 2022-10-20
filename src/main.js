@@ -31,6 +31,9 @@ const requestListener = function (req, res) {
   }
 };
 
+let _httpServer = undefined;
+let _httpsServer = undefined;
+
 // Open a window on start.
 // (https://dev.twitch.tv/docs/extensions/designing):
 // Panel Extensions are limited to 318px wide x 496px high, to avoid iframe
@@ -51,10 +54,8 @@ app.whenReady().then(() => {
     cert: fs.readFileSync(__dirname + "/../cert/cert.pem"),
   };
   const hostname = "localhost";
-  const httpServer = http
-    .createServer(requestListener)
-    .listen(HTTP_PORT, hostname);
-  const httpsServer = https
+  _httpServer = http.createServer(requestListener).listen(HTTP_PORT, hostname);
+  _httpsServer = https
     .createServer(options, requestListener)
     .listen(HTTPS_PORT, hostname);
 });
@@ -62,7 +63,11 @@ app.whenReady().then(() => {
 // Quit the app when all windows are closed (Windows & Linux)
 app.on("window-all-closed", () => {
   console.log("window-all-closed, exiting");
-  httpServer.close();
-  httpsServer.close();
+  if (_httpServer) {
+    _httpServer.close();
+  }
+  if (_httpsServer) {
+    _httpsServer.close();
+  }
   app.quit();
 });
