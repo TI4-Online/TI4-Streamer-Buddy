@@ -6,16 +6,13 @@ const { app, BrowserWindow } = require("electron");
 const HTTP_PORT = 8080;
 const HTTPS_PORT = 8081;
 
-const getKeyHandler = require("./handler/get-key");
-const postKeyHandler = require("./handler/post-key").__addPostKeyListener(
-  getKeyHandler.__postKeyListener
-);
+const KeyDataHandler = require("./handler/key-data");
 
 const HANDLERS = {
   static: require("./handler/static"),
-  postkey: postKeyHandler,
-  postkey_ttpg: postKeyHandler,
-  data: getKeyHandler,
+  postkey: KeyDataHandler.postHandler,
+  postkey_ttpg: KeyDataHandler.postHandler,
+  data: KeyDataHandler.getHandler,
 };
 
 const requestListener = function (req, res) {
@@ -44,7 +41,7 @@ app.whenReady().then(() => {
     width: 320,
     height: 500, // panel may be 100-500 heigth
   });
-  postKeyHandler.__addPostKeyListener((key, data) => {
+  KeyDataHandler.addOnPostListener((key, data) => {
     win.loadURL("http://localhost:8080/static/panel.html");
   });
 
