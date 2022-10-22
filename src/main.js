@@ -13,6 +13,7 @@ const HANDLERS = {
   postkey: KeyDataHandler.postHandler,
   postkey_ttpg: KeyDataHandler.postHandler,
   data: KeyDataHandler.getHandler,
+  "": require("./handler/root"),
 };
 
 const requestListener = function (req, res) {

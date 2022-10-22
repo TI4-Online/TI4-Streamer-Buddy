@@ -31,6 +31,8 @@ class KeyDataHandler {
 
       // Always set access control, even if an error.
       res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Expose-Headers", "Last-Modified");
+      res.setHeader("Cache-Control", "no-cache");
 
       // 400 Bad Request?
       if (!key) {
