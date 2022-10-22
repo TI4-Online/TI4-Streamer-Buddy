@@ -1,6 +1,11 @@
 let _lastModified = "n/a";
 let _loopFetchHandle = undefined;
 
+// How to listen for updates:
+window.addEventListener("onLoopFetchResult", (json) => {
+  console.log("onLoopFetchResult");
+});
+
 const loopFetch = async () => {
   await fetch("/data?key=buddy", {
     cache: "no-cache",
@@ -26,6 +31,8 @@ const loopFetch = async () => {
 
     response.json().then((json) => {
       console.log(`loopFetch success, lastModified: "${_lastModified}`);
+      const event = new CustomEvent("onLoopFetchResult", json);
+      window.dispatchEvent(event);
     });
   });
 };
@@ -33,4 +40,7 @@ const loopFetch = async () => {
 window.addEventListener("DOMContentLoaded", (window, event) => {
   console.log("loopFetch start");
   _loopFetchHandle = setInterval(loopFetch, 3000);
+
+  // Also run right away.
+  loopFetch();
 });
