@@ -1,8 +1,25 @@
 <!DOCTYPE html>
 <head>
   <title>TI4 Streamer Buddy</title>
+
   <script src="/static/refresh.js"></script>
+  <script type="text/javascript">
+    window.addEventListener("onGameDataUpdate", (json) => {
+      console.log("onGameDataUpdate");
+    });
+  </script>
 </head>
 <body>
   <p>TI4 Streamer Buddy</p>
+
+  <div id="content">
+    Run the
+    <b
+      ><a href="https://github.com/TI4-Online/TI4-Streamer-Buddy/releases"
+        >TI4 Streamer Buddy</a
+      ></b
+    >
+    companion app, type "!buddy" in the TTPG chat window, then refresh this
+    browser.
+  </div>
 </body>
