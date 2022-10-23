@@ -31,3 +31,6 @@ jobs:
           # release the app after building
           #release: ${{ startsWith(github.ref, 'refs/tags/v') }}
           release: true
+
+          # https://lightrun.com/answers/samuelmeuli-action-electron-builder-action-not-publishing-release
+          args: "-c.snap.publish=github"
