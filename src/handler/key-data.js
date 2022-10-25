@@ -1,5 +1,3 @@
-const assert = require("assert");
-
 const _keyToData = {};
 const _onGetListeners = [];
 const _onPostListeners = [];
