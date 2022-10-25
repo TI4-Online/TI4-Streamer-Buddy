@@ -7,13 +7,15 @@ const HTTP_PORT = 8080;
 const HTTPS_PORT = 8081;
 
 const KeyDataHandler = require("./handler/key-data");
+const RootHandler = require("./handler/root");
 
 const HANDLERS = {
   static: require("./handler/static"),
   postkey: KeyDataHandler.postHandler,
   postkey_ttpg: KeyDataHandler.postHandler,
   data: KeyDataHandler.getHandler,
-  "": require("./handler/root"),
+  "": RootHandler,
+  "index.html": RootHandler,
 };
 
 let _httpServer = undefined;
@@ -55,7 +57,7 @@ app.whenReady().then(() => {
     width: 320,
     height: 500, // panel may be 100-500 heigth
   });
-  win.loadURL("http://localhost:8080/");
+  win.loadURL("http://localhost:8080/index.html");
   //KeyDataHandler.addOnPostListener((key, data) => {
   //  win.loadURL("http://localhost:8080/static/panel.html");
   //});
