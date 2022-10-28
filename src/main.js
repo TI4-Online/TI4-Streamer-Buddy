@@ -26,6 +26,7 @@ const requestListener = function (req, res) {
   const handler = HANDLERS[handlerName];
   if (handler) {
     handler(req, res);
+    console.log(`request "${req.url}" -> ${res.statusCode}`);
   } else {
     console.log(`no handler for "${req.url}"`);
     res.writeHead(404);
@@ -54,13 +55,11 @@ function setSecurityPolicy() {
 app.whenReady().then(() => {
   setSecurityPolicy();
   const win = new BrowserWindow({
-    width: 320,
+    //width: 318,
+    //height: 496, // panel may be 100-500 heigth
+    width: 1300,
     height: 500, // panel may be 100-500 heigth
   });
-  win.loadURL("http://localhost:8080/index.html");
-  //KeyDataHandler.addOnPostListener((key, data) => {
-  //  win.loadURL("http://localhost:8080/static/panel.html");
-  //});
 
   // "curl -k" to tolerate this self-signed cert
   const options = {
@@ -72,6 +71,9 @@ app.whenReady().then(() => {
   _httpsServer = https
     .createServer(options, requestListener)
     .listen(HTTPS_PORT, hostname);
+
+  win.loadURL("http://localhost:8080/static/leaderboard.html");
+  //win.webContents.openDevTools();
 });
 
 // Quit the app when all windows are closed (Windows & Linux)
