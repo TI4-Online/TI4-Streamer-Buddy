@@ -73,7 +73,7 @@ app.whenReady().then(() => {
     .listen(HTTPS_PORT, hostname);
 
   win.loadURL("http://localhost:8080/static/leaderboard.html");
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 });
 
 // Quit the app when all windows are closed (Windows & Linux)

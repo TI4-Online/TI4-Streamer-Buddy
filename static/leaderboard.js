@@ -62,7 +62,7 @@ class Leaderboard {
 
     const factionIconImg = cell.getElementsByClassName("faction-icon")[0];
     console.assert(factionIconImg);
-    factionIconImg.src = `/static/faction-icons/${faction}_icon.png`;
+    factionIconImg.src = `faction-icons/${faction}_icon.png`;
 
     const factionNameDiv = cell.getElementsByClassName("faction-name")[0];
     console.assert(factionNameDiv);

@@ -111,6 +111,9 @@ class GameDataUtil {
     console.assert(typeof playerData === "object");
 
     let colorName = playerData?.colorActual?.toLowerCase();
+    if (!colorName) {
+      colorName = playerData?.color.toLowerCase();
+    }
     let colorHex = COLOR_NAME_TO_HEX[colorName];
     if (!colorHex) {
       colorName = UNKNOWN_COLOR_NAME;
@@ -212,4 +215,93 @@ class GameDataUtil {
       return { name, faceDown: faceDown.includes(name) };
     });
   }
+
+  /**
+   * Parse objectives by type and who scored.
+   *
+   * @param {Object} gameData
+   * @returns {Object} objectives
+   */
+  static parseObjectives(gameData) {
+    console.assert(typeof gameData === "object");
+
+    const objectives = {
+      stage1: [],
+      stage2: [],
+      secret: [],
+      custodians: [],
+      sftt: [],
+      other: [], // shard, etc
+    };
+
+    // Fill in the above objectives, and keep a map from name to entry.
+    const nameToEntry = {};
+    const addEntry = (name, addToList) => {
+      console.assert(typeof name === "string");
+      console.assert(Array.isArray(addToList));
+      const entry = {
+        name: GameDataUtil.escapeForHTML(name),
+        scoredBy: [],
+      };
+      nameToEntry[name] = entry;
+      addToList.push(entry);
+      return entry;
+    };
+    const addEntries = (names, addToList) => {
+      console.assert(Array.isArray(names));
+      console.assert(Array.isArray(addToList));
+      for (const name of names) {
+        addEntry(name, addToList);
+      }
+    };
+
+    // Group objectives into categories.  Split out support from other.
+    const gameDataObjectives = gameData?.objectives || [];
+    for (const [key, names] of Object.entries(gameDataObjectives)) {
+      if (key === "Secret Objectives") {
+        addEntries(names, objectives.secret);
+      } else if (key === "Public Objectives I") {
+        addEntries(names, objectives.stage1);
+      } else if (key === "Public Objectives II") {
+        addEntries(names, objectives.stage2);
+      } else {
+        for (const name of names) {
+          if (name.startsWith("Support for the Throne")) {
+            addEntry(name, objectives.sftt);
+          } else {
+            addEntry(name, objectives.other);
+          }
+        }
+      }
+    }
+
+    // Who scored?
+    const gameDataPlayers = gameData?.players || [];
+    for (const playerData of gameDataPlayers) {
+      const colorName = GameDataUtil.parseColor(playerData).colorName;
+      const playerObjectives = playerData?.objectives || [];
+      for (const name of playerObjectives) {
+        const entry = nameToEntry[name];
+        console.assert(entry);
+        entry.scoredBy.push(colorName);
+      }
+    }
+
+    // Add custodians, a player can score more than once.
+    const custodiansEntry = addEntry("custodians", objectives.custodians);
+    for (const playerData of gameDataPlayers) {
+      const colorName = GameDataUtil.parseColor(playerData).colorName;
+      const custodiansPoints = playerData?.custodiansPoints || 0;
+      for (let i = 0; i < custodiansPoints; i++) {
+        custodiansEntry.scoredBy.push(colorName);
+      }
+    }
+
+    return objectives;
+  }
+}
+
+// Export for jest test framework.
+if (typeof module !== "undefined") {
+  module.exports = { GameDataUtil };
 }
