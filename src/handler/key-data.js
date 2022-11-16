@@ -27,8 +27,9 @@ class KeyDataHandler {
         });
       const key = args.key;
 
-      // Always set access control, even if an error.
+      // Always set access control and content type, even if an error.
       res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Content-Type", "application/json");
       res.setHeader("Access-Control-Expose-Headers", "Last-Modified");
       res.setHeader("Cache-Control", "no-cache");
 
@@ -63,6 +64,7 @@ class KeyDataHandler {
       }
 
       // 200 OK.
+      //res.setHeader("Config-Length", data.data.length);
       res.writeHead(200);
       res.end(data.data);
       for (const listener of _onGetListeners) {
