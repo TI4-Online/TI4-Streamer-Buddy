@@ -55,10 +55,10 @@ function setSecurityPolicy() {
 app.whenReady().then(() => {
   setSecurityPolicy();
   const win = new BrowserWindow({
-    //width: 318,
-    //height: 496, // panel may be 100-500 heigth
-    width: 1300,
-    height: 500, // panel may be 100-500 heigth
+    width: 318,
+    height: 496, // panel may be 100-500 heigth
+    //width: 1300,
+    //height: 500, // panel may be 100-500 heigth
   });
 
   // "curl -k" to tolerate this self-signed cert
@@ -72,7 +72,7 @@ app.whenReady().then(() => {
     .createServer(options, requestListener)
     .listen(HTTPS_PORT, hostname);
 
-  win.loadURL("http://localhost:8080/static/leaderboard.html");
+  win.loadURL("http://localhost:8080/static/index.html");
   win.webContents.openDevTools();
 });
 
