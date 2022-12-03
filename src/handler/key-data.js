@@ -1,116 +1,99 @@
-const _keyToData = {};
-const _onGetListeners = [];
-const _onPostListeners = [];
+const { AbstractHandler } = require("./abstract-handler");
 
-class KeyDataHandler {
+class KeyDataHandler extends AbstractHandler {
   constructor() {
-    throw new Error("static only");
+    super();
+    this._keyToData = {};
   }
 
-  static addOnPostListener(listener) {
-    _onPostListeners.push(listener);
+  isMatch(url) {
+    return (
+      url.pathname === "/postkey" ||
+      url.pathname === "/postkey_ttpg" ||
+      url.pathname === "/data"
+    );
   }
 
-  static addOnGetListener(listener) {
-    _onPostListeners.push(listener);
+  handle(url, req, res) {
+    if (url.pathname === "/data") {
+      this._get(url, req, res);
+    } else if (
+      url.pathname === "/postkey" ||
+      url.pathname === "/postkey_ttpg"
+    ) {
+      this._put(url, req, res);
+    } else {
+      throw new Error(`bad pathname "${url.pathname}`);
+    }
   }
 
-  static get getHandler() {
-    return (req, res) => {
-      const args = {};
-      req.url
-        .split("?")[1]
-        .split("&")
-        .map((kv) => {
-          const parts = kv.split("=");
-          args[parts[0]] = parts[1];
-        });
-      const key = args.key;
+  _get(url, req, res) {
+    const key = url.search.get("key");
 
-      // Always set access control and content type, even if an error.
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.setHeader("Content-Type", "application/json");
-      res.setHeader("Access-Control-Expose-Headers", "Last-Modified");
-      res.setHeader("Cache-Control", "no-cache");
+    // Always set access control and content type, even if an error.
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Access-Control-Expose-Headers", "Last-Modified");
+    res.setHeader("Cache-Control", "no-cache");
 
-      // 400 Bad Request?
-      if (!key) {
-        res.writeHead(400);
-        res.end();
-        return;
-      }
+    // 400 Bad Request?
+    if (!key) {
+      res.writeHead(400);
+      res.end();
+      return;
+    }
 
-      // 404 Not Found?
-      const data = _keyToData[key];
-      if (!data) {
-        res.writeHead(404);
-        res.end();
-        return;
-      }
+    // 404 Not Found?
+    const data = _keyToData[key];
+    if (!data) {
+      res.writeHead(404);
+      res.end();
+      return;
+    }
 
-      const lastModified = data.timestamp;
-      res.setHeader("Last-Modified", lastModified);
+    const lastModified = data.timestamp;
+    res.setHeader("Last-Modified", lastModified);
 
-      // 304 Not Modified?
-      // Just do an exact string compare, respond even if older.
-      const ifModifiedSince = req.headers["if-modified-since"]; // lowercase
-      if (ifModifiedSince && ifModifiedSince === lastModified) {
-        res.writeHead(304);
-        res.end();
-        for (const listener of _onGetListeners) {
-          listener(key, 304);
-        }
-        return;
-      }
+    // 304 Not Modified?
+    // Just do an exact string compare, respond even if older.
+    const ifModifiedSince = req.headers["if-modified-since"]; // lowercase
+    if (ifModifiedSince && ifModifiedSince === lastModified) {
+      res.writeHead(304);
+      res.end();
+      return;
+    }
 
-      // 200 OK.
-      //res.setHeader("Config-Length", data.data.length);
+    // 200 OK.
+    res.setHeader("Config-Length", data.data.length);
+    res.writeHead(200);
+    res.end(data.data);
+  }
+
+  _put(url, req, res) {
+    const key = url.search.get("key");
+
+    if (!key) {
+      res.writeHead(400);
+      res.end();
+      return;
+    }
+
+    // Handler is called early, POST body might still be arriving.
+    // Collect full POST body before finishing request.
+    let data = "";
+    req.on("data", (chunk) => {
+      data += chunk;
+    });
+    req.on("end", () => {
       res.writeHead(200);
-      res.end(data.data);
-      for (const listener of _onGetListeners) {
-        listener(key, 200);
-      }
-    };
-  }
+      res.end();
 
-  static get postHandler() {
-    return (req, res) => {
-      const args = {};
-      req.url
-        .split("?")[1]
-        .split("&")
-        .map((kv) => {
-          const parts = kv.split("=");
-          args[parts[0]] = parts[1];
-        });
-      const key = args.key;
-      if (!key) {
-        res.writeHead(400);
-        res.end();
-        return;
-      }
-
-      // Handler is called early, POST body might still be arriving.
-      // Collect full POST body before finishing request.
-      let data = "";
-      req.on("data", (chunk) => {
-        data += chunk;
-      });
-      req.on("end", () => {
-        res.writeHead(200);
-        res.end();
-
-        _keyToData[key] = {
-          data: data,
-          timestamp: new Date().toUTCString(),
-        };
-
-        for (const listener of _onPostListeners) {
-          listener(key, 200);
-        }
-      });
-    };
+      _keyToData[key] = {
+        data: data,
+        timestamp: new Date().toUTCString(),
+      };
+    });
   }
 }
 
-module.exports = KeyDataHandler;
+module.exports = { KeyDataHandler };

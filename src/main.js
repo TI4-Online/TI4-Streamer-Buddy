@@ -6,33 +6,19 @@ const { app, session, BrowserWindow } = require("electron");
 const HTTP_PORT = 8080;
 const HTTPS_PORT = 8081;
 
-const KeyDataHandler = require("./handler/key-data");
-const RootHandler = require("./handler/root");
-
-const HANDLERS = {
-  static: require("./handler/static"),
-  postkey: KeyDataHandler.postHandler,
-  postkey_ttpg: KeyDataHandler.postHandler,
-  data: KeyDataHandler.getHandler,
-  "": RootHandler,
-  "index.html": RootHandler,
-};
+const { KeyDataHandler } = require("./handler/key-data");
+const { RootHandler } = require("./handler/root");
+const { AbstractHandler } = require("./handler/abstract-handler");
+const { StaticHandler } = require("./handler/static");
 
 let _httpServer = undefined;
 let _httpsServer = undefined;
 
-const requestListener = function (req, res) {
-  const handlerName = req.url.split("/")[1].split("?")[0];
-  const handler = HANDLERS[handlerName];
-  if (handler) {
-    handler(req, res);
-    console.log(`request "${req.url}" -> ${res.statusCode}`);
-  } else {
-    console.log(`no handler for "${req.url}"`);
-    res.writeHead(404);
-    res.end();
-  }
-};
+const requestListener = AbstractHandler.getHTTPServerRequestListener([
+  new KeyDataHandler(),
+  new RootHandler(),
+  new StaticHandler(),
+]);
 
 // Specify a content security policy.
 // https://www.electronjs.org/docs/latest/tutorial/security#7-define-a-content-security-policy
@@ -57,8 +43,6 @@ app.whenReady().then(() => {
   const win = new BrowserWindow({
     width: 318,
     height: 496, // panel may be 100-500 heigth
-    //width: 1300,
-    //height: 500, // panel may be 100-500 heigth
   });
 
   // "curl -k" to tolerate this self-signed cert
@@ -73,7 +57,7 @@ app.whenReady().then(() => {
     .listen(HTTPS_PORT, hostname);
 
   win.loadURL("http://localhost:8080/static/index.html");
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 });
 
 // Quit the app when all windows are closed (Windows & Linux)
