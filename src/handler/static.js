@@ -24,12 +24,10 @@ class StaticHandler extends AbstractHandler {
 
     fs.readFile(filename, (err, data) => {
       if (err) {
-        console.log(`staticHandler: missing "${filename}"`);
         res.writeHead(404);
         res.end();
         return;
       }
-      console.log(`staticHandler: serving "${filename}"`);
       res.writeHead(200);
       res.end(data);
     });

@@ -14,6 +14,12 @@ const { StaticHandler } = require("./handler/static");
 let _httpServer = undefined;
 let _httpsServer = undefined;
 
+// Allow self-signed certificates for locally loaded web pages.  This applies
+// when loading a github pages URL (requires HTTPS) which then reads from
+// localhost HTTPS, serving the self-signed content.  Need to do this early,
+// e.g. app.whenReady is too late.
+app.commandLine.appendSwitch("ignore-certificate-errors");
+
 const requestListener = AbstractHandler.getHTTPServerRequestListener([
   new KeyDataHandler(),
   new RootHandler(),
@@ -40,8 +46,12 @@ function setSecurityPolicy() {
 // text within your extension, for maximum readability.
 app.whenReady().then(() => {
   setSecurityPolicy();
+
+  console.log("ARGV: " + JSON.stringify(process.argv));
+
+  // 318x496 for Twitch panel.
   const win = new BrowserWindow({
-    width: 318,
+    width: 1214,
     height: 496, // panel may be 100-500 heigth
   });
 
@@ -56,13 +66,28 @@ app.whenReady().then(() => {
     .createServer(options, requestListener)
     .listen(HTTPS_PORT, hostname);
 
-  win.loadURL("http://localhost:8080/static/index.html");
-  //win.webContents.openDevTools();
+  // Load the overlay from ti4-online.github.io, that way the overlay can be
+  // updated independently of the electron app.
+  let url = "https://ti4-online.github.io/overlay/overlay.html";
+
+  // Allow command line to override URL.
+  const urlFlagIndex = process.argv.indexOf("--url");
+  if (urlFlagIndex >= 0) {
+    // `python3 -m http.server` serves at `http://localhost:8000/`
+    url = process.argv[urlFlagIndex + 1];
+  }
+  console.log(`url "${url}"`);
+  console.assert(url.startsWith("http"));
+  win.loadURL(url);
+
+  // Command line to open the javascript console.
+  if (process.argv.includes("--debug")) {
+    win.webContents.openDevTools();
+  }
 });
 
 // Quit the app when all windows are closed (Windows & Linux)
 app.on("window-all-closed", () => {
-  console.log("window-all-closed, exiting");
   if (_httpServer) {
     _httpServer.close();
   }

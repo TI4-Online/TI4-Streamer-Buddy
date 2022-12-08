@@ -28,7 +28,7 @@ class KeyDataHandler extends AbstractHandler {
   }
 
   _get(url, req, res) {
-    const key = url.search.get("key");
+    const key = url.searchParams.get("key");
 
     // Always set access control and content type, even if an error.
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -44,7 +44,7 @@ class KeyDataHandler extends AbstractHandler {
     }
 
     // 404 Not Found?
-    const data = _keyToData[key];
+    const data = this._keyToData[key];
     if (!data) {
       res.writeHead(404);
       res.end();
@@ -70,7 +70,7 @@ class KeyDataHandler extends AbstractHandler {
   }
 
   _put(url, req, res) {
-    const key = url.search.get("key");
+    const key = url.searchParams.get("key");
 
     if (!key) {
       res.writeHead(400);
@@ -88,7 +88,7 @@ class KeyDataHandler extends AbstractHandler {
       res.writeHead(200);
       res.end();
 
-      _keyToData[key] = {
+      this._keyToData[key] = {
         data: data,
         timestamp: new Date().toUTCString(),
       };
