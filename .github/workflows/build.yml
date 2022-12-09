@@ -27,7 +27,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
 
           # Make a new release if it does not exist.
-          use_vue_cli: true
+          #use_vue_cli: true
           args: "-p always"
 
           # If the commit is tagged with a version (e.g. "v1.0.0"),
