@@ -11,6 +11,7 @@
     "electron-builder": "^23.0.3"
   },
   "dependencies": {
+    "@vue/cli": "^5.0.8",
     "http": "^0.0.1-security"
   },
   "scripts": {
