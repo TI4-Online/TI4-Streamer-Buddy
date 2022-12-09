@@ -19,10 +19,10 @@ jobs:
         with:
           node-version: 16
           
-      - name: Install vue-cli
-        run: |
-          npm install @vue/cli
-          npm install @vue/cli-service
+      #- name: Install vue-cli
+      #  run: |
+      #    npm install @vue/cli
+      #    npm install @vue/cli-service
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1.6.0
