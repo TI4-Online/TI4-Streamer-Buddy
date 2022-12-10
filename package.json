@@ -18,8 +18,8 @@
     "buddy": "electron .",
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder --windows",
-    "release": "electron-builder --windows --publish always"
-    "electron:build": "vue-cli-service electron:build",
+    "release": "electron-builder --windows --publish always",
+    "electron:build": "vue-cli-service electron:build"
   },
   "build": {
     "appId": "com.example.ti4-streamer-buddy",
