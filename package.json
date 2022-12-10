@@ -7,12 +7,11 @@
   "author": "Darrell",
   "license": "Unlicense",
   "devDependencies": {
+    "@vue/cli-service": "^5.0.8",
     "electron": "^18.0.3",
     "electron-builder": "^23.0.3"
   },
   "dependencies": {
-    "@vue/cli": "^5.0.8",
-    "@vue/cli-service": "^5.0.8",
     "http": "^0.0.1-security"
   },
   "scripts": {
@@ -20,6 +19,7 @@
     "postinstall": "electron-builder install-app-deps",
     "build": "electron-builder --windows",
     "release": "electron-builder --windows --publish always"
+    "electron:build": "vue-cli-service electron:build",
   },
   "build": {
     "appId": "com.example.ti4-streamer-buddy",
