@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vue/cli": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "http": "^0.0.1-security"
   },
   "scripts": {
