@@ -2,9 +2,15 @@
 
 ### Setup instructions
 
+Download the streamer buddy app from [releases](https://github.com/TI4-Online/TI4-Streamer-Buddy/releases).
+
 Run the streamer buddy app on the TI4-TTPG host's computer, type "!buddy" into chat to have the mod start pushing data to buddy.
 
-(The app runs a local webserver on ports 8080 and 8081, it does not need access to access to the filesystem if you want to sandbox it.)
+The overlay is hosted online and can be updated without needing a new version of the streamer buddy app.  It is possible future features could require downloading a new version, but those major changes should be very rare.
+
+### Security
+
+The app runs a local webserver on ports 8080 and 8081, it does not need access to access to the filesystem beyond loading the app itself.
 
 ### Developer information
 
