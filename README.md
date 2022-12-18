@@ -1,6 +1,12 @@
 # TI4-Streamer-Buddy
 
+### Setup instructions
+
 Run the streamer buddy app on the TI4-TTPG host's computer, type "!buddy" into chat to have the mod start pushing data to buddy.
+
+(The app runs a local webserver on ports 8080 and 8081, it does not need access to access to the filesystem if you want to sandbox it.)
+
+### Developer information
 
 Github actions build the app for Mac/Windows when the tag changes. Update the tag via:
 
