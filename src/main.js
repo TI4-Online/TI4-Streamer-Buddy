@@ -51,7 +51,7 @@ app.whenReady().then(() => {
 
   // 318x496 for Twitch panel.
   const win = new BrowserWindow({
-    width: 1214,
+    width: 1230,
     height: 496, // panel may be 100-500 heigth
   });
 
