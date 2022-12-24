@@ -21,6 +21,7 @@ class StaticHandler extends AbstractHandler {
     if (contentType) {
       res.setHeader("Content-Type", contentType);
     }
+    res.setHeader("Access-Control-Allow-Origin", "*");
 
     fs.readFile(filename, (err, data) => {
       if (err) {
