@@ -6,6 +6,10 @@ Download the streamer buddy app from [releases](https://github.com/TI4-Online/TI
 
 Run the streamer buddy app on the TI4-TTPG host's computer, type "!buddy" into chat to have the mod start pushing data to buddy.
 
+To use with OBS, start the app then load "[http://localhost:8080/overlay/overlay.html](http://localhost:8080/overlay/overlay.html)" there.
+
+On a mac: right click the application and select "open" (it is not signed by a trusted authority, double clicking the app with the normal security settings prevents you from starting it).
+
 The overlay is hosted online and can be updated without needing a new version of the streamer buddy app.  It is possible future features could require downloading a new version, but those major changes should be very rare.
 
 ### Security
