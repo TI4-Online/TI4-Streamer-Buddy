@@ -10,6 +10,7 @@ const { KeyDataHandler } = require("./handler/key-data");
 const { RootHandler } = require("./handler/root");
 const { AbstractHandler } = require("./handler/abstract-handler");
 const { StaticHandler } = require("./handler/static");
+const { OverlayRelayHandler } = require("./handler/overlay-relay");
 
 let _httpServer = undefined;
 let _httpsServer = undefined;
@@ -24,6 +25,7 @@ const requestListener = AbstractHandler.getHTTPServerRequestListener([
   new KeyDataHandler(),
   new RootHandler(),
   new StaticHandler(),
+  new OverlayRelayHandler(),
 ]);
 
 // Specify a content security policy.
