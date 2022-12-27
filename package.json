@@ -1,6 +1,6 @@
 {
   "name": "ti4-streamer-buddy",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Localhost service for Twitch overlays",
   "main": "src/main.js",
   "repository": "https://github.com/TI4-Online/TI4-Streamer-Buddy.git",
