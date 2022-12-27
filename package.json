@@ -7,8 +7,8 @@
   "author": "Darrell",
   "license": "Unlicense",
   "devDependencies": {
-    "electron": "^18.0.3",
-    "electron-builder": "^23.0.3"
+    "electron": "^22.0.0",
+    "electron-builder": "22.14.13"
   },
   "dependencies": {
     "electron-fetch": "^1.9.1",
